@@ -1,6 +1,9 @@
 package com.example.proyectofinalieee;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -15,13 +18,19 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.proyectofinalieee.fragments.AgregarEvento;
+import com.example.proyectofinalieee.fragments.CalificacionActividades;
 import com.example.proyectofinalieee.fragments.FragCalendario;
 import com.example.proyectofinalieee.fragments.FragCambiarContrasenia;
+import com.example.proyectofinalieee.fragments.FragCrearActividad;
+import com.example.proyectofinalieee.fragments.FragDeportes;
 import com.example.proyectofinalieee.fragments.FragEditarPerfil;
+import com.example.proyectofinalieee.fragments.FragEscaner;
 import com.example.proyectofinalieee.fragments.FragEvento;
 import com.example.proyectofinalieee.fragments.FragForo;
 import com.example.proyectofinalieee.fragments.FragMostrarEvento;
+import com.example.proyectofinalieee.fragments.FragPSU;
 import com.example.proyectofinalieee.fragments.FragPerfil;
+import com.example.proyectofinalieee.fragments.FragSalud;
 import com.example.proyectofinalieee.fragments.FragmentoInfo;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;

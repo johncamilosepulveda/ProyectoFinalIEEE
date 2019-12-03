@@ -1,10 +1,11 @@
 package com.example.proyectofinalieee.fragments;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -12,63 +13,50 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.MultiTransformation;
-import com.bumptech.glide.load.Transformation;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.request.RequestOptions;
-import com.example.proyectofinalieee.Adapters.HorarioAdapter;
+import com.example.proyectofinalieee.Adapters.ForoAdapter;
 import com.example.proyectofinalieee.R;
+import com.example.proyectofinalieee.model.Constantes;
 import com.example.proyectofinalieee.model.Foro;
-import com.example.proyectofinalieee.utilities.RoundedCornersTransformation;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragForo.OnFragmentInteractionListener} interface
+ * {@link FragSalud.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragForo#newInstance} factory method to
+ * Use the {@link FragSalud#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragForo extends Fragment {
+public class FragSalud extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private TextView nombre;
-    private ImageView imagenActividad;
-    private TextView descripcion;
-    private Button botonCalificarActividad;
 
-    private CalificacionActividades calificacionActividades;
+    private TextView tv_item;
+    private ListView lv_items;
 
-    private Foro actividad;
-
-    private ListView view_horarios;
-    private HorarioAdapter horarioAdapter;
+    private FirebaseStorage storage;
+    private FirebaseDatabase db;
 
 
+    private ForoAdapter actividadAdapter;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    public FragForo() {
+    public FragSalud() {
         // Required empty public constructor
     }
 
@@ -78,11 +66,11 @@ public class FragForo extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragActividad.
+     * @return A new instance of fragment FragSalud.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragForo newInstance(String param1, String param2) {
-        FragForo fragment = new FragForo();
+    public static FragSalud newInstance(String param1, String param2) {
+        FragSalud fragment = new FragSalud();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -93,74 +81,62 @@ public class FragForo extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        actividad = (Foro) bundle.getSerializable("actividad");
-        Log.e(">>: ", actividad.getNombre());
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
-    FirebaseDatabase db;
-    FirebaseAuth auth;
-    FirebaseStorage storage;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View inflaterView = inflater.inflate(R.layout.fragment_frag_salud, null);
+
+        //tv_item = inflaterView.findViewById(R.id.tv_item);
+
+        actividadAdapter = new ForoAdapter(this.getContext());
+
 
         db = FirebaseDatabase.getInstance();
-        auth = FirebaseAuth.getInstance();
-        storage = FirebaseStorage.getInstance();
+        db.getReference().child("Actividades").child(Constantes.TIPOS_FOROS[2]).addChildEventListener
+                (new ChildEventListener() {
+                     @Override
+                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                         Foro actividad = dataSnapshot.getValue(Foro.class);
+                         Log.e(">>", actividad.getNombre());
+                         actividadAdapter.addActividad(actividad);
+                     }
 
-        calificacionActividades = new CalificacionActividades();
+                     @Override
+                     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-        final View viewInflater = inflater.inflate(R.layout.fragment_frag_foro, null);
-        imagenActividad = viewInflater.findViewById(R.id.iv_imagen);
-        nombre = viewInflater.findViewById(R.id.tv_nombre);
-        descripcion = viewInflater.findViewById(R.id.tv_descripcion);
+                     }
 
-        view_horarios = viewInflater.findViewById(R.id.list_horarios);
-        horarioAdapter = new HorarioAdapter(this.getActivity());
-        view_horarios.setAdapter(horarioAdapter);
-        horarioAdapter.setHorarios(actividad.getHorarios());
+                     @Override
+                     public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-        nombre.setText(actividad.getNombre());
-        descripcion.setText(actividad.getDescripcion());
+                     }
 
-        botonCalificarActividad = viewInflater.findViewById(R.id.bt_pasar_calificar_foro);
-        botonCalificarActividad.setEnabled(false);
-        Log.e(">>>", auth.getCurrentUser().getEmail());
+                     @Override
+                     public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-        StorageReference storageReference = storage.getReference().child("fotos").child(actividad.getImg());
-        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                     }
+
+                     @Override
+                     public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                     }
+                 }
+                );
+
+        lv_items = inflaterView.findViewById(R.id.lv_deportes);
+        lv_items.setAdapter(actividadAdapter);
+        lv_items.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onSuccess(Uri uri) {
-                int sCorner = 15;
-                int sMargin = 2;
-                int sBorder = 10;
-                String sColor = "#2874A6";
-                List<Transformation<Bitmap>> transforms = new LinkedList<>();
-                transforms.add(new CenterCrop(getContext()));
-                transforms.add(new RoundedCornersTransformation(getContext(), sCorner, sMargin, sColor, sBorder));
-
-                MultiTransformation transformation = new MultiTransformation<Bitmap>(transforms);
-
-                Glide.with(getActivity()).load(uri)
-                        .apply(new RequestOptions()
-                                .bitmapTransform(transformation))
-                        .into(imagenActividad);
-                botonCalificarActividad.setEnabled(true);
-            }
-        });
-        //borrar
-
-        botonCalificarActividad.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CalificacionActividades fragmento = new CalificacionActividades();
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                FragForo fragmento = new FragForo();
+                Foro actividad = actividadAdapter.getItem(i);
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("actividad", actividad);
@@ -171,12 +147,8 @@ public class FragForo extends Fragment {
                 transaction.commit();
             }
         });
-
-
-        //
-
         // Inflate the layout for this fragment
-        return viewInflater;
+        return inflaterView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
