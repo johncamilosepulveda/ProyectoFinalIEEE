@@ -1,10 +1,15 @@
 package com.example.proyectofinalieee;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +27,7 @@ import com.example.proyectofinalieee.fragments.CalificacionActividades;
 import com.example.proyectofinalieee.fragments.FragCalendario;
 import com.example.proyectofinalieee.fragments.FragCambiarContrasenia;
 import com.example.proyectofinalieee.fragments.FragCrearActividad;
+import com.example.proyectofinalieee.fragments.FragCultura;
 import com.example.proyectofinalieee.fragments.FragDeportes;
 import com.example.proyectofinalieee.fragments.FragEditarPerfil;
 import com.example.proyectofinalieee.fragments.FragEscaner;
@@ -30,9 +36,13 @@ import com.example.proyectofinalieee.fragments.FragForo;
 import com.example.proyectofinalieee.fragments.FragMostrarEvento;
 import com.example.proyectofinalieee.fragments.FragPSU;
 import com.example.proyectofinalieee.fragments.FragPerfil;
+import com.example.proyectofinalieee.fragments.FragRegistro;
 import com.example.proyectofinalieee.fragments.FragSalud;
 import com.example.proyectofinalieee.fragments.FragmentoInfo;
+import com.example.proyectofinalieee.model.Constantes;
+import com.example.proyectofinalieee.model.Usuario;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -53,7 +63,7 @@ public class MenuIEEE extends AppCompatActivity
         FragForo.OnFragmentInteractionListener, CalificacionActividades.OnFragmentInteractionListener,
         FragCrearActividad.OnFragmentInteractionListener, FragEditarPerfil.OnFragmentInteractionListener,
         FragEscaner.OnFragmentInteractionListener, FragEvento.OnFragmentInteractionListener,
-        FragRegistro.OnFragmentInteractionListener, FragReportesActividad.OnFragmentInteractionListener {
+        FragRegistro.OnFragmentInteractionListener {
 
     private FragDeportes fragDeportes;
     private FragSalud fragSalud;
@@ -61,14 +71,13 @@ public class MenuIEEE extends AppCompatActivity
     private FragPSU fragPSU;
 
     private FragEscaner fragEscaner;
-    private FragReportesActividad fragReportesActividad;
     private FragRegistro fragRegistro;
     private FragCalendario fragCalendario;
     private FragmentoInfo fragmentoInfo;
     private FragPerfil fragPerfil;
     private FragCambiarContrasenia fragCambiarContrasenia;
     private AgregarEvento fragAgregarEvento;
-    private FragActividad fragActividad;
+    private FragForo fragActividad;
     private FragCrearActividad fragCrearActividad;
     private CalificacionActividades calificacionActividades;
 
@@ -92,6 +101,7 @@ public class MenuIEEE extends AppCompatActivity
     private FirebaseAuth.AuthStateListener authStateListener;
 
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,15 +120,14 @@ public class MenuIEEE extends AppCompatActivity
         fragmentoInfo = new FragmentoInfo();
         fragPerfil = new FragPerfil();
         fragAgregarEvento = new AgregarEvento();
-        fragActividad = new FragActividad();
+        fragActividad = new FragForo();
         fragMostrarEventos = new FragMostrarEvento();
         fragCambiarContrasenia = new FragCambiarContrasenia();
-        fragActividad = new FragActividad();
+        fragActividad = new FragForo();
         calificacionActividades = new CalificacionActividades();
         fragCrearActividad = new FragCrearActividad();
         fragEscaner = new FragEscaner();
         fragRegistro = new FragRegistro();
-        fragReportesActividad = new FragReportesActividad();
 
         fragPSU = new FragPSU();
         fragCultura = new FragCultura();
@@ -127,7 +136,7 @@ public class MenuIEEE extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerLayout =
-                navigationView.inflateHeaderView(R.layout.nav_header_menu_bienestar);
+                navigationView.inflateHeaderView(R.layout.nav_header_menu_ieee);
         img_usuario = headerLayout.findViewById(R.id.img_usuario);
 
 
@@ -178,6 +187,7 @@ public class MenuIEEE extends AppCompatActivity
 
         fb_agregar_actividad = findViewById(R.id.fab_anhadir);
         fb_agregar_actividad.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void onClick(View view) {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -190,6 +200,7 @@ public class MenuIEEE extends AppCompatActivity
 
         fb_home = (FloatingActionButton) findViewById(R.id.fab);
         fb_home.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("RestrictedApi")
             @Override
             public void onClick(View view) {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -204,8 +215,9 @@ public class MenuIEEE extends AppCompatActivity
         });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle;
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.common_open_on_phone, R.string.app_name);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -220,6 +232,7 @@ public class MenuIEEE extends AppCompatActivity
     private void guardarRol() {
         db.getReference().child("Usuarios").orderByChild("correo").equalTo(auth.getCurrentUser().getEmail())
                 .addChildEventListener(new ChildEventListener() {
+                    @SuppressLint("RestrictedApi")
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         Usuario user = dataSnapshot.getValue(Usuario.class);
@@ -270,7 +283,7 @@ public class MenuIEEE extends AppCompatActivity
         if (auth.getCurrentUser() == null) {
             Toast.makeText(this, "Failed to connect", Toast.LENGTH_SHORT).show();
             finish();
-            Intent i = new Intent(MenuBienestar.this, Login.class);
+            Intent i = new Intent(MenuIEEE.this, Login.class);
             startActivity(i);
             return false;
         }
@@ -291,7 +304,7 @@ public class MenuIEEE extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_bienestar, menu);
+        getMenuInflater().inflate(R.menu.menu_ieee, menu);
         this.menu = menu;
         return true;
     }
@@ -313,6 +326,7 @@ public class MenuIEEE extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("RestrictedApi")
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -335,7 +349,7 @@ public class MenuIEEE extends AppCompatActivity
             fragmentTransaction.replace(R.id.contenedorFragments, fragCalendario).commit();
         } else if (id == R.id.nav_sesion) {
             auth.signOut();
-            Intent i = new Intent(MenuBienestar.this, Login.class);
+            Intent i = new Intent(MenuIEEE.this, Login.class);
             startActivity(i);
             finish();
             Intent intent = new Intent(this, NotificationService.class);
@@ -356,8 +370,6 @@ public class MenuIEEE extends AppCompatActivity
             fragmentTransaction.replace(R.id.contenedorFragments, fragEscaner).commit();
         } else if (id == R.id.add_admin) {
             fragmentTransaction.replace(R.id.contenedorFragments, fragRegistro).commit();
-        } else if (id == R.id.ver_reportes) {
-            fragmentTransaction.replace(R.id.contenedorFragments, fragReportesActividad).commit();
         }
 
 

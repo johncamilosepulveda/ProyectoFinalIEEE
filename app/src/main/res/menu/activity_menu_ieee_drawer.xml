@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_deporte"
+            android:icon="@drawable/deporte"
+            android:title="Deporte y actividad física"
+            />
+        <item
+            android:id="@+id/nav_cultura"
+            android:icon="@drawable/cultura"
+            android:title="Cultura" />
+        <item
+            android:id="@+id/nav_salud"
+            android:icon="@drawable/salud"
+            android:title="Desarollo humano y salud" />
+        <item
+            android:id="@+id/nav_psu"
+            android:icon="@drawable/psu"
+            android:title="PSU" />
+        <item
+            android:id="@+id/nav_calendario"
+            android:icon="@drawable/calendario"
+            android:title="Calendario" />
+        <item
+            android:id="@+id/nav_informacion"
+            android:icon="@drawable/informacion"
+            android:title="Información" />
+    </group>
+    <item android:title="Otras funcionalidades"
+        android:id="@+id/otras_funcionalidades">
+        <menu>
+            <item
+                android:id="@+id/add_activity"
+                android:icon="@drawable/agregar"
+                android:title="Crear Actividad" />
+            <item
+                android:id="@+id/add_admin"
+                android:icon="@drawable/admin"
+                android:title="Agregar Administrador" />
+            <item
+                android:id="@+id/ver_reportes"
+                android:icon="@drawable/estadisticas"
+                android:title="Mostrar Reportes" />
+            <item
+                android:id="@+id/escaner"
+                android:icon="@drawable/escnaer"
+                android:title="Escaner asistencia" />
+
+        </menu>
+    </item>
+
+    <item android:title="Usuario">
+        <menu>
+            <item
+                android:id="@+id/nav_perfil"
+                android:icon="@drawable/perfil"
+                android:title="Editar perfil" />
+            <item
+                android:id="@+id/nav_contrasenha"
+                android:icon="@drawable/contrasenha"
+                android:title="Cambiar contraseña" />
+
+            <item
+                android:id="@+id/nav_sesion"
+                android:icon="@drawable/sesion"
+                android:title="Cerrar sesión" />
+
+        </menu>
+    </item>
+
+
+
+</menu>

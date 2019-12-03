@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Terminos"
+    android:background="#00629B"
+    android:layout_margin="30dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logoramaeee" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:text="TÉRMINOS Y CONDICIONES APP IEEE ICESI"
+        android:textColor="#FFFFFF"
+        android:textAlignment="center"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="La Rama Estudiantil es un grupo oficialmente constituido ante el IEEE mundial , conformado por estudiantes de diferentes programas académicos de pregrado y postgrado de una Universidad determinada, cuyos objetivos principales son la permanente actualización profesional, la investigación, el desarrollo e implementación de nuevas tecnologías.
+Dentro de sus actividades principales están la organización y participación en congresos técnicos y charlas de profesionalización, generación de conocimiento a través de la investigación, desarrollo e implementación enmarcados en las nuevas tecnologías.Al acceder y utilizar este servicio, usted acepta y accede a utilizar esta aplicación solo con estos fines. Si no acepta cumplir con lo anterior, por favor, no continue con el proceso.\n "
+        android:textColor="#FFFFFF"
+        android:textSize="15dp"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:textAlignment="center"/>
+</LinearLayout>
